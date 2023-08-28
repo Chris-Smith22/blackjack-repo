@@ -62,10 +62,12 @@ class Player(Players):
     def bet(self, game):
         while True:
             print(f"{self.name} has ${self.bank} in the bank.")
-            bet_value = int(input("How much would you like to bet? "))
+            bet_value = input("How much would you like to bet? ")
 
-        
-            if self.bank < bet_value:
+            if not bet_value.isnumeric():
+                continue
+
+            elif self.bank < bet_value:
                 print("Cannot bet more than you have in bank:", self.bank)
 
             elif bet_value < game.min_bet and bet_value != 0:
