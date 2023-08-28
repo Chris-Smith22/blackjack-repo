@@ -33,7 +33,7 @@ class Card:
             raise InvalidCard
 
 
-    def __eq__(self, other_card: Card) -> bool:
+    def __eq__(self, other_card) -> bool:
         return self.rank == other_card.rank
         
         
@@ -49,6 +49,7 @@ class Hand:
     def __init__(self, num_of_cards, cards: list):
         self.num_of_cards = num_of_cards
         self.cards = cards
+        self.split = False
 
 
     #Add card to hand
@@ -56,6 +57,9 @@ class Hand:
         self.cards.append(card)
         self.num_of_cards += 1
 
+    def remove_card(self, index):
+        self.cards.remove(index)
+        self.num_of_cards -= 1
 
     #Get value of hand:
     def get_hValue(self) -> tuple:

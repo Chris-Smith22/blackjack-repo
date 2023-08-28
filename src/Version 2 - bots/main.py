@@ -8,49 +8,58 @@ from game_bs import *
 #def round():
 
 
-def play():
+def play_game():
+    #Default settings
+    d_stand = 17
+    initial_bank = 500
+
+    #Setup:
+    players_num = int(input("How many players will be playing? "))
+    players = []
+    for i in range(players_num):
+         print(f"Player {i+1}'s name is: ", end='')
+         name = input()
+         players.append(Player(name, initial_bank))
+    
+#Initialize Game:
+    
+    dealer = Dealer(d_stand)
+    game = Game(dealer, players)
+
+    print(f"\n\nThe default settings are the following:\n\tDealer stands on {d_stand}\n\
+        Players start with ${initial_bank}\n\tThere are 6 decks in a shoe\n\tMin bet: 5 and Max bet : 1000.\n")
+    
     print("Starting game...")
-    #num_of_players = input("How many players would you like to play with? ")
-    #players
-    #num_of_decks = input()
-    #note dealer does not stand on soft 17
+    
+#Game's Loop:
+    while len(players) > 0:
+    
+    #round setup
+        playing = game.prompt_bet()
 
-    #Setup dealer, players, game
-    dealer = Dealer(stand_value = 17)
-    player1 = Player('Chris', 500)
-    game = Game([player1], dealer, 6, 25, 1000)
-
-
-    #Prompt bet, initial deal:
-    while player1.bank >= 25:
-        bets_present = False
-        players_in_round = game.prompt_bet()
+        if len(playing) == 0:
+            endRound(game) #cleanup players hands and display standings
+            print("Thank you for Playing!")
+            break
         
-        for player in players_in_round:
-            if player.bet_val > 0:
-                bets_present = True
-
-        if not bets_present:
-             endRound(game)
-             print("Thank you for playing!")
-             break
-             
-        game.set_players_in_round(players_in_round)
+        game.players_in_round = playing
         game.initial_deal()
-
-        #Play:
+        #game.display_hands(False)
+        
+    #play round:
         if game.dealer.hand.get_hValue()[1] != 21:
-            game.prompt_action(game.players_in_round)
-        else:
-             game.display_hands(True)
-        
-        
+            game.prompt_action()
         game.play_dealer()
-        
+
+        #game.payout() #pay players_in_round and pay house those who are beat -bj and bust already paid
+
+    #end round:
+        endRound(game)
         print(f"Round {game.round} over.\n")
         input("Press enter for next round.\n")
-        endRound(game)
-        
+
+
+
 
     
 
@@ -62,9 +71,12 @@ def runSim():
 def endRound(game):
     game.display_standings()
     game.clean_up()
+    for player in game.gplayers:
+         if player.bank < game.min_bet:
+              game.gplayers.remove(player)
     
 
 #main()
 if __name__ == '__main__':
-        play()
+        play_game()
     

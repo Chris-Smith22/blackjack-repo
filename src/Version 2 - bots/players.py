@@ -1,5 +1,4 @@
 from deck import *
-from game_bs import *
 
 class Players:
 
@@ -8,30 +7,36 @@ class Players:
         self.hand = Hand(0, [])
         
     def hit(self, card):
+        print("Hit!")
         self.hand.add_card(card)
         return self.hand
 
     def stay(self):
+        print("Stay")
         return self.hand
     
     def display_cards(self):
         print(f"{self.name}: {str(self.hand)}")
 
-    def split(self, game: Game, player2):
+    def split(self, game, player2):
         #Add copy of player to players in round
-        
-        players = game.players_in_round
-        this_index = players.index(self)
+        print("Split!")
 
-        players.insert(this_index, player2)    #game.prompt_action() otherwise give it an input of players and run it again
         
         #Match bets:
         player2.bet_val = self.bet_val
         self.bank -= player2.bet_val
 
         #Split hands:
-        player2.hand.append(self.hand[1])
-        self.hand.remove(1) #double check that one card hands work and that we reunite the two players after.
+        player2.hand.add_card(self.hand.cards[1]) #append(self.hand[1])
+        player2.hand.split = True
+        self.hand.remove_card(self.hand.cards[1]) #double check that one card hands work and that we reunite the two players after.
+        self.hand.split = True
+
+        this_index = game.players_in_round.index(self)
+        game.players_in_round.insert(this_index+1, player2)
+        
+
         
 
 class Dealer(Players):
@@ -66,8 +71,10 @@ class Player(Players):
 
             if not bet_value.isnumeric():
                 continue
+            else:
+                bet_value = int(bet_value)
 
-            elif self.bank < bet_value:
+            if self.bank < bet_value:
                 print("Cannot bet more than you have in bank:", self.bank)
 
             elif bet_value < game.min_bet and bet_value != 0:
@@ -88,30 +95,31 @@ class Player(Players):
             return False
 
 
-    def play(self, action, shoe: Shoe):
+    def play(self, action, game):
         
         if action == 'H':
-            card = shoe.distribute_card()
+            card = game.shoe.distribute_card()
             self.hit(card)
 
         elif action == 'S':
             self.stay()
         
         elif action == 'D':
-            card = shoe.distribute_card()
+            card = game.shoe.distribute_card()
             self.double(card)
 
         elif action == 'P':
-            self.split()
+            self.split(game)
     
 
     def double(self, card):
+        print("Double!")
         self.bank -= self.bet_val
         self.bet_val *= 2
         self.hit(card)
 
 
-    def split(self, game: Game):
+    def split(self, game):
         #Add copy of player to players in round
         
         player2 = Player(self.name + '2', self.bank) #must make same type as Player
@@ -142,7 +150,7 @@ class BasicStrategist(Bot):
 
 
     #Overload to make same type
-    def split(self, game: Game):
+    def split(self, game):
         #Add copy of player to players in round
         
         player2 = BasicStrategist(self.name + '2', self.bank)
@@ -153,7 +161,7 @@ class BasicStrategist(Bot):
     def play(self, game):
         hand = self.hand
         hand_vals = hand.get_hValue()
-        upCard = game.dealer.upCard.get_cValue()
+        upCard = game.dealer.upCard.value
 
         action = ''
         while hand_vals[0] < 22 and action != 's' and action != 'd':
@@ -166,7 +174,7 @@ class BasicStrategist(Bot):
                 if hand.num_of_cards() == 2 and self.bank >= self.bet_val:
                     
                     #Split:
-                    ranks = hand.cards[0].get_cValue() #1-10, 11
+                    ranks = hand.cards[0].value() #1-10, 11
                     if (hand.cards[0].rank == hand.cards[1].rank and ranks != 5 and ranks != 10):
                     
                         h_cond1 = (ranks == 4 and ((upCard > 1 and upCard < 5) or (upCard == 7)))

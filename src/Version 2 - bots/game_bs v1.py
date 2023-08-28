@@ -3,7 +3,7 @@ from deck import *
 
 class Game:
 
-    def __init__(self, dealer: Dealer, players = [], num_of_decks = 6, min_bet = 5, max_bet = 1000):
+    def __init__(self, players, dealer: Dealer, num_of_decks, min_bet, max_bet):
 
         self.gplayers = players
         self.dealer = dealer
@@ -53,13 +53,15 @@ class Game:
             player.display_cards()
         self.dealer.display_cards(played)
 
+    def set_players_in_round(self, players_in_round):
+        self.players_in_round = players_in_round
+        return
+
 
     def prompt_action(self):
         #prompt each given player to act
 
-        i = 0
-        while i < len(self.players_in_round):
-            player = self.players_in_round[i]
+        for player in self.players_in_round:
             
             if isinstance(player, Bot):
                 player.play(self)
@@ -95,6 +97,7 @@ class Game:
             
             #Result of actions:
             player.display_cards()
+
                 #Natural Blackjack
             if hand.get_hValue()[1] == 21 and hand.get_hValue()[0] != 21:
                 print("Blackjack!")
@@ -105,8 +108,7 @@ class Game:
                 print("Busted.")
                 self.house_standing += player.bet_val
                 player.bet_val = 0
-            print()
-            i += 1
+    
 
 
     def play_dealer(self):
@@ -133,6 +135,7 @@ class Game:
 
             card = self.shoe.distribute_card()
             self.dealer.hit(card)
+            print("Hit!")
             self.dealer.display_cards(True)
 
 
@@ -178,6 +181,7 @@ class Game:
         print(f"\n\tThe House stands at ${self.house_standing}.")
 
 
+
     def payout(self, player):
         pay = 0
         if len(player.hand.cards) == 2 and player.hand.get_hValue()[1] == 21:
@@ -191,18 +195,21 @@ class Game:
         if player.name.endswith('2'):
             for person in self.players_in_round:
                 if person.name == player.name.strip('2'):
-                    #Person is player2
+                    #Person is player
                     temp = player
-                    person.bet_val = player.bet_val
                     player = person
                     self.players_in_round.remove(temp)
+
+                    
+
 
 
         player.bank += player.bet_val + pay
         player.bet_val = 0
-        print(f"{player.name} won ${pay}")
-        #print(f"{player.name}'s balance now stands at ${player.bank}")
+        print(f"You won ${pay}")
+        print(f"Your balance now stands at ${player.bank}")
         self.house_standing -= pay
+        #print(f"The House now stands at {self.house_standing}")
 
 
     def clean_up(self):
@@ -212,6 +219,4 @@ class Game:
             player.hand.split = False
             player.bet_val = 0
         self.dealer.hand.cards = []
-        self.dealer.hand.num_of_cards = 0
-        self.players_in_round = []
         
