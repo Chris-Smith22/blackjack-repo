@@ -1,0 +1,13 @@
+*Contents:
+    - main.py: file to be run. Sets parameters for game, starts and ends games.
+
+    - players.py: file with every player type and their actions
+
+    - deck.py: everything to do with the playing cards themselves and their attributes, from card, hand, deck.  
+
+    - game.py: file with all functions of a game.
+
+*Files:
+
+#Notes for next time:
+Make sure split players are reunited after they have both played. Maybe fct looking for players2
