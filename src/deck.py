@@ -106,10 +106,11 @@ class Hand:
         
      
 class Deck:
+    num_of_cards = 52
 
     def __init__(self):
         self.cards = self.generate_deck()
-        self.num_of_cards = 52
+        
     
 
     def generate_deck(self):
@@ -131,6 +132,7 @@ class Shoe:
     def __init__(self, num_of_decks):
         self.num_of_decks = num_of_decks
         self.decks = self.generate_shoe()
+        self.cutoff = self.num_of_decks * 52 * 0.1
         
     
     def generate_shoe(self):
@@ -145,19 +147,15 @@ class Shoe:
 
     def distribute_card(self):
         #Returns first card in shoe, if exists
-
-        #Check num of decks != 0:
-        if (self.num_of_decks == 0):
-            print("Empty shoe.")
-            return
         
-        #Check length of deck:
-        for deck in self.decks:
-            if len(deck.cards) == 0:
-                self.decks.remove(deck)
-                self.num_of_decks -= 1
+        #Switch deck if first deck empty:
+        if len(self.decks[0].cards) == 0:
+            self.decks.pop(0)
+        
+        #Refill shoe
+        if self.num_of_decks == 1 and len(self.decks[0].cards) <= self.cutoff:
+            self.decks = self.generate_shoe()
 
-        #New Card:
         card = self.decks[0].cards.pop(0)
         self.decks[0].num_of_cards -= 1
         

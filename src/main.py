@@ -57,16 +57,49 @@ def play_game():
         endRound(game)
         print(f"Round {game.round} over.\n")
         input("Press enter for next round.\n")
-
-
-
-
     
 
         
     
-def runSim():
-     pass
+def run_sim():
+
+    #Setup Game
+    d_stand = 17
+    initial_bank = 500
+
+    bot1 = BasicStrategist("BasicBot", initial_bank)
+    players = [bot1]
+
+    dealer = Dealer(d_stand)
+    game = Game(dealer, players)
+
+    #Game's Loop:
+    while len(players) > 0:
+    
+    #round setup
+        playing = game.prompt_bet()
+
+        if len(playing) == 0:
+            endRound(game) #cleanup players hands and display standings
+            print("Thank you for Playing!")
+            break
+        
+        game.players_in_round = playing
+        game.initial_deal()
+        
+        
+    #play round:
+        if game.dealer.hand.get_hValue()[1] != 21:
+            game.prompt_action()
+        game.play_dealer()
+
+    #end round:
+        endRound(game)
+        print(f"Round {game.round} over.\n")
+
+
+
+
 
 def endRound(game):
     game.display_standings()
@@ -78,5 +111,6 @@ def endRound(game):
 
 #main()
 if __name__ == '__main__':
-        play_game()
+        #play_game()
+        run_sim()
     

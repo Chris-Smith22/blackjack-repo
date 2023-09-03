@@ -8,8 +8,8 @@ class Game:
         self.gplayers = players
         self.dealer = dealer
         self.house_standing = 0
-
-        self.shoe = Shoe(num_of_decks)
+        self.num_of_decks = num_of_decks
+        self.shoe = Shoe(self.num_of_decks)
         self.min_bet = min_bet
         self.max_bet = max_bet
         
@@ -60,14 +60,14 @@ class Game:
         i = 0
         while i < len(self.players_in_round):
             player = self.players_in_round[i]
-            
+            hand = player.hand 
+
             if isinstance(player, Bot):
                 player.play(self)
             
             #Player
             else:
                 
-                hand = player.hand 
                 action = ''
                 while (hand.get_hValue()[0] < 21) and (action.upper() != 'D') \
                     and (hand.get_hValue()[1] != 21) and (action.upper() != 'S'):
@@ -125,10 +125,10 @@ class Game:
         
 
         #Hit:
-        while d_hand.get_hValue()[0] < 17:
+        while d_hand.get_hValue()[0] < self.dealer.stand_value:
 
             #Stand on soft 17
-            if d_hand.get_hValue()[1] > 16 and d_hand.get_hValue()[1] < 22:
+            if d_hand.get_hValue()[1] > self.dealer.stand_value and d_hand.get_hValue()[1] < 22:
                 break
 
             card = self.shoe.distribute_card()

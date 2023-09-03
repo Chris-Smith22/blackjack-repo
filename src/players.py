@@ -15,6 +15,12 @@ class Players:
         print("Stay")
         return self.hand
     
+    def double(self, card):
+        print("Double!")
+        self.bank -= self.bet_val
+        self.bet_val *= 2
+        self.hit(card)
+    
     def display_cards(self):
         print(f"{self.name}: {str(self.hand)}")
 
@@ -98,25 +104,18 @@ class Player(Players):
     def play(self, action, game):
         
         if action == 'H':
-            card = game.shoe.distribute_card()
+            card = game.shoe.distribute_card(game)
             self.hit(card)
 
         elif action == 'S':
             self.stay()
         
         elif action == 'D':
-            card = game.shoe.distribute_card()
+            card = game.shoe.distribute_card(game)
             self.double(card)
 
         elif action == 'P':
             self.split(game)
-    
-
-    def double(self, card):
-        print("Double!")
-        self.bank -= self.bet_val
-        self.bet_val *= 2
-        self.hit(card)
 
 
     def split(self, game):
@@ -129,9 +128,10 @@ class Player(Players):
         
 
 
-class Bot(Player):
+class Bot(Players):
     def __init__(self, name: str, bank: int):
-        super().__init__(name, bank)
+        super().__init__(name)
+        self.bank = bank
     
 
 class BasicStrategist(Bot):
@@ -160,21 +160,21 @@ class BasicStrategist(Bot):
 
     def play(self, game):
         hand = self.hand
-        hand_vals = hand.get_hValue()
         upCard = game.dealer.upCard.value
 
         action = ''
-        while hand_vals[0] < 22 and action != 's' and action != 'd':
+        while hand.get_hValue()[0] < 22 and action != 's' and action != 'd':
+            hand_vals = hand.get_hValue()
             action = '' #reset action
             
             #Hard:
             if hand_vals[0] == hand_vals[1] or hand_vals[1] > 21:
                 #Default: hit
 
-                if hand.num_of_cards() == 2 and self.bank >= self.bet_val:
+                if hand.num_of_cards == 2 and self.bank >= self.bet_val:
                     
                     #Split:
-                    ranks = hand.cards[0].value() #1-10, 11
+                    ranks = hand.cards[0].value #1-10, 11
                     if (hand.cards[0].rank == hand.cards[1].rank and ranks != 5 and ranks != 10):
                     
                         h_cond1 = (ranks == 4 and ((upCard > 1 and upCard < 5) or (upCard == 7)))
@@ -186,7 +186,7 @@ class BasicStrategist(Bot):
                         #spHit
                         if h_cond1 or h_cond2 or h_cond3:
                             action = 'h'
-                            card = game.shoe.distribute_card()
+                            card = game.shoe.distribute_card(game)
                             self.hit(card)
 
                         elif stays:
@@ -206,7 +206,7 @@ class BasicStrategist(Bot):
 
                         if double_condition1 or double_condition2 or double_condition3:
                             action = 'd'
-                            card = game.shoe.distribute_card()
+                            card = game.shoe.distribute_card(game)
                             self.double(card)
 
 
@@ -219,7 +219,7 @@ class BasicStrategist(Bot):
 
                     if hcond1 or hcond2:
                         action = 'h'
-                        card = game.shoe.distribute_card()
+                        card = game.shoe.distribute_card(game)
                         self.hit(card)
 
                     #Stay:
@@ -230,18 +230,18 @@ class BasicStrategist(Bot):
             #Soft:
             else:
                 #Double or Split
-                if hand.num_of_cards() == 2 and self.bank >= self.bet_val:
+                if hand.num_of_cards == 2 and self.bank >= self.bet_val:
                     double_condition1 = (hand_vals[1] > 19 and hand_vals[1] > 12 and upCard < 7 and upCard > 4)
                     double_condition2 = (hand_vals[1] < 19 and hand_vals[1] > 16 and upCard < 5 and upCard > 2)
                     double_condition3 = (hand_vals[1] < 17 and hand_vals[1] > 14 and upCard == 4)
                     
-                    if hand.cards[0].rank == hand.card[1].rank:
+                    if hand.cards[0].rank == hand.cards[1].rank:
                         action = 'sp'
                         self.split(game)
 
                     elif (double_condition1 or double_condition2 or double_condition3):
                         action = 'd'
-                        card = game.shoe.distribute_card()
+                        card = game.shoe.distribute_card(game)
                         self.double(card)
 
                 if action == '':
@@ -253,7 +253,7 @@ class BasicStrategist(Bot):
                     
                     else:
                         action = 'h'
-                        card = game.shoe.distribute_card()
+                        card = game.shoe.distribute_card(game)
                         self.hit(card)
                 
 
