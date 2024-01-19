@@ -14,26 +14,6 @@ The project includes the following main components:
 - **Performance Tracking**: A system to track the performance of each strategy over a specified number of games.
 - **Spreadsheet and Graphs (Work In Progress)**: A feature to export strategy performance data to a spreadsheet and plot graphs to visualize the data.
 
-## Getting Started
-1. Clone this repository to your local machine.
-2. Navigate to the project directory.
-3. Open the main program file: `main.py`.
-4. Modify settings like the number of games to play, strategy to use, and any other parameters.
-5. Run the program to simulate Blackjack games, observe strategy performance, or play the game yourself.
-
-## Usage
-1. Launch the program using your preferred Python interpreter.
-2. Follow the on-screen instructions to select a strategy, specify the number of games to play, and any other relevant options.
-3. If you choose to play the game yourself, enjoy a game of Blackjack in a heads-up match against the dealer or in multiplayer mode.
-4. The program will simulate the specified number of games using the chosen strategy and display the results.
-5. Note: The spreadsheet and graph features are still in development.
-
-## Contribution
-Contributions to the project are welcome! If you have ideas for new strategies, enhancements, or bug fixes, feel free to submit a pull request.
-
-## License
-(Work in Progress)
-
 ## Acknowledgments
 This project was inspired by a love for Blackjack (not for gambling) and a desire to explore different strategies in a fun and educational way.
 

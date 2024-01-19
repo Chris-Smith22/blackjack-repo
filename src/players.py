@@ -104,14 +104,14 @@ class Player(Players):
     def play(self, action, game):
         
         if action == 'H':
-            card = game.shoe.distribute_card(game)
+            card = game.shoe.distribute_card()
             self.hit(card)
 
         elif action == 'S':
             self.stay()
         
         elif action == 'D':
-            card = game.shoe.distribute_card(game)
+            card = game.shoe.distribute_card()
             self.double(card)
 
         elif action == 'P':
@@ -186,7 +186,7 @@ class BasicStrategist(Bot):
                         #spHit
                         if h_cond1 or h_cond2 or h_cond3:
                             action = 'h'
-                            card = game.shoe.distribute_card(game)
+                            card = game.shoe.distribute_card()
                             self.hit(card)
 
                         elif stays:
@@ -206,7 +206,7 @@ class BasicStrategist(Bot):
 
                         if double_condition1 or double_condition2 or double_condition3:
                             action = 'd'
-                            card = game.shoe.distribute_card(game)
+                            card = game.shoe.distribute_card()
                             self.double(card)
 
 
@@ -219,7 +219,7 @@ class BasicStrategist(Bot):
 
                     if hcond1 or hcond2:
                         action = 'h'
-                        card = game.shoe.distribute_card(game)
+                        card = game.shoe.distribute_card()
                         self.hit(card)
 
                     #Stay:
@@ -241,7 +241,7 @@ class BasicStrategist(Bot):
 
                     elif (double_condition1 or double_condition2 or double_condition3):
                         action = 'd'
-                        card = game.shoe.distribute_card(game)
+                        card = game.shoe.distribute_card()
                         self.double(card)
 
                 if action == '':
@@ -253,7 +253,7 @@ class BasicStrategist(Bot):
                     
                     else:
                         action = 'h'
-                        card = game.shoe.distribute_card(game)
+                        card = game.shoe.distribute_card()
                         self.hit(card)
                 
 

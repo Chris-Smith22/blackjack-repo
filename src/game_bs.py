@@ -3,7 +3,7 @@ from deck import *
 
 class Game:
 
-    def __init__(self, dealer: Dealer, players = [], num_of_decks = 6, min_bet = 5, max_bet = 1000):
+    def __init__(self, dealer: Dealer, players = [], num_of_decks = 6, min_bet = 25, max_bet = 1000):
 
         self.gplayers = players
         self.dealer = dealer
