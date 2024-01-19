@@ -72,7 +72,8 @@ def run_sim():
 
     dealer = Dealer(d_stand)
     game = Game(dealer, players)
-
+    
+    print("Starting game...")
     #Game's Loop:
     while len(players) > 0:
     

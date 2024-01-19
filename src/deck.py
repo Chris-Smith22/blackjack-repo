@@ -132,7 +132,8 @@ class Shoe:
     def __init__(self, num_of_decks):
         self.num_of_decks = num_of_decks
         self.decks = self.generate_shoe()
-        self.cutoff = self.num_of_decks * 52 * 0.1
+        self.cutoff = 18
+        self.deck = 0
         
     
     def generate_shoe(self):
@@ -149,15 +150,19 @@ class Shoe:
         #Returns first card in shoe, if exists
         
         #Switch deck if first deck empty:
-        if len(self.decks[0].cards) == 0:
-            self.decks.pop(0)
+        if len(self.decks[self.deck].cards) == 0:
+            self.decks.pop(self.deck)
+            self.deck += 1
+
         
         #Refill shoe
-        if self.num_of_decks == 1 and len(self.decks[0].cards) <= self.cutoff:
+        if self.num_of_decks - 1 == self.deck and len(self.decks[self.deck].cards) <= self.cutoff:
             self.decks = self.generate_shoe()
+            self.deck = 0
+        
 
-        card = self.decks[0].cards.pop(0)
-        self.decks[0].num_of_cards -= 1
+        card = self.decks[self.deck].cards.pop(0)
+        self.decks[self.deck].num_of_cards -= 1
         
         return card
 
