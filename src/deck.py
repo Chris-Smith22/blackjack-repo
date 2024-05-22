@@ -27,20 +27,20 @@ class Card:
         finally:
             return value
 
+    def __eq__(self, other_card) -> bool:
+        return self.rank == other_card.rank
+    
     def validity(self):
         if (self.suit not in SUITS) or (self.rank not in RANKS):
             print("Invalid card. Check rank and/or suit.")
             raise InvalidCard
-
-
-    def __eq__(self, other_card) -> bool:
-        return self.rank == other_card.rank
         
-        
+
 
 
 class InvalidCard(Exception):
     pass
+
 
 
 class Hand:
