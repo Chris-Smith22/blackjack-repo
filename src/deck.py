@@ -8,9 +8,7 @@ class Card:
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
-        self.validity()
         self.value = self.get_cValue()
-     
     
     def __str__(self):
         return str(self.suit) + str(self.rank)
@@ -29,28 +27,14 @@ class Card:
 
     def __eq__(self, other_card) -> bool:
         return self.rank == other_card.rank
-    
-    def validity(self):
-        if (self.suit not in SUITS) or (self.rank not in RANKS):
-            print("Invalid card. Check rank and/or suit.")
-            raise InvalidCard
-        
-
-
-
-class InvalidCard(Exception):
-    pass
-
 
 
 class Hand:
     
     #Create hand (most likely to 0 cards, before adding)
-    def __init__(self, num_of_cards, cards: list):
-        self.num_of_cards = num_of_cards
+    def __init__(self, cards: list = []):
         self.cards = cards
         self.split = False
-
 
     #Add card to hand
     def add_card(self, card):
