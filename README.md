@@ -4,7 +4,7 @@
 Welcome to the **Blackjack Strategy Performance Tracker and Game** project! This project aims to compare the effectiveness of various Blackjack strategies in reducing House Edge. Different strategies, such as Basic Strategy, card counting, random play, and imitating the dealer, will be implemented and their performances tracked over a given number of games.
 
 ## Project Overview
-The project involves creating a Blackjack simulation program that allows you to test and compare different strategies. Players can choose from various strategies and play a specified number of games. Additionally, users have the option to play the game themselves in a heads-up match against the dealer, with options to play solo, with other users, or against computer-controlled players using different strategies.
+The project involves creating a Blackjack simulation program to test and compare different strategies. Players can choose from various strategies and play a specified number of games. Additionally, users have the option to play the game themselves in a heads-up match against the dealer, with options to play solo, with other users, or with CPU players using different strategies.
 
 The project includes the following main components:
 
